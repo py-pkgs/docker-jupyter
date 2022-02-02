@@ -5,21 +5,25 @@ on:
       - main
     paths:
       - 'Dockerfile'
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - uses: actions/checkout@master
+
+    - name: Checkout repository
+      uses: actions/checkout@master
       with:
         fetch-depth: '0'
+
     - name: Bump version and push tag
       uses: anothrNick/github-tag-action@1.17.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
       id: bump
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -33,10 +37,11 @@ jobs:
           - Rebuilt Docker image and published to DockerHub with new tag
         draft: false
         prerelease: false
+
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: tbeuzen/py-pkgs-jupyter
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        username: ${{ secrets.DOCKER_USERNAME_TB }}
+        password: ${{ secrets.DOCKER_PASSWORD_TB }}
         tags: "latest,${{ steps.bump.outputs.new_tag }}"
