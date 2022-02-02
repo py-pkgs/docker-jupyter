@@ -20,10 +20,10 @@ jobs:
 
     - name: Bump version and push tag
       uses: anothrNick/github-tag-action@1.17.2
+      id: bump
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
-      id: bump
 
     - name: Create Release
       id: create_release
