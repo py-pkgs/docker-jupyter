@@ -7,6 +7,7 @@ USER root
 RUN apt update --yes && \
   apt upgrade --yes && \
   apt install --yes --no-install-recommends \
+  make \
   curl
 
 USER ${NB_UID}
